@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Elanco Tick Tracker</title>
+
+    <!-- Our Tailwind CSS -->
+    <link rel="stylesheet" href="./css/output.css">
+
+    <!-- MapLibre styling for the map -->
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@6.16.0/dist/maplibre-gl.css">
+</head>
+
+<body class="bg-[#F1F8F2] text-gray-800">
+
+    <a href="#main-content"
+        class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:rounded-lg focus:bg-white focus:px-4 focus:py-3 focus:text-black focus:ring-2 focus:ring-blue-600">
+        Skip to main content
+    </a>
+
+    <!-- MAIN HEADER -->
+    <header class="sticky top-0 z-50 w-full border-b-2
+               border-[#173B70] bg-white/95 shadow-sm
+               backdrop-blur-md">
+
+        <!-- Logo and project title -->
+        <div class="mx-auto grid max-w-7xl
+                grid-cols-[5rem_minmax(0,1fr)_5rem]
+                items-center gap-2 px-4 py-2
+                sm:grid-cols-[7rem_minmax(0,1fr)_7rem]
+                sm:px-6">
+
+            <!-- Elanco logo -->
+            <a href="./index.html" aria-label="Elanco Tick Tracker home">
+
+                <img src="https://assets.elanco.com/63faca97-0277-00f3-7b39-47b486080a51/36d47bdf-2ff4-4f35-bc5f-defabec9d028/Elanco%20Logo.png"
+                    alt="Elanco logo" class="block w-20 sm:w-24">
+            </a>
+
+            <!-- Project title -->
+            <h1 class="text-center text-sm font-bold
+                   leading-tight text-[#173B70]
+                   sm:text-lg">
+
+                Elanco Tick Tracker
+
+                <span class="mt-1 block text-xs font-medium
+                         text-[#536C7D] sm:text-sm">
+                    Placement Task
+                </span>
+
+            </h1>
+
+            <!-- Keeps the title centred -->
+            <div aria-hidden="true"></div>
+
+        </div>
+
+        <!-- Horizontal navigation -->
+        <nav class="flex w-full flex-nowrap items-center
+                justify-start gap-2 overflow-x-auto
+                border-t border-[#E5EFE8] px-3 py-2
+                sm:justify-center" aria-label="Main navigation">
+
+            <a href="#map" class="shrink-0 rounded-full border border-[#173B70]
+                  px-4 py-2 text-xs font-semibold
+                  text-[#173B70] transition-colors
+                  hover:bg-[#EDF5FB] sm:text-sm">
+                Sighting Map
+            </a>
+
+            <a href="#tickGuide" class="shrink-0 rounded-full border border-[#173B70]
+                  px-4 py-2 text-xs font-semibold
+                  text-[#173B70] transition-colors
+                  hover:bg-[#EDF5FB] sm:text-sm">
+                Tick Guide
+            </a>
+
+            <a href="#prevention" class="shrink-0 rounded-full border border-[#173B70]
+                  px-4 py-2 text-xs font-semibold
+                  text-[#173B70] transition-colors
+                  hover:bg-[#EDF5FB] sm:text-sm">
+                Prevention Tips
+            </a>
+
+            <a href="./report.html" class="shrink-0 rounded-full bg-[#0072CE]
+                  px-5 py-2 text-xs font-semibold
+                  text-white shadow-sm transition-colors
+                  hover:bg-[#173B70] sm:text-sm">
+                + Report a Sighting
+            </a>
+
+        </nav>
+
+    </header>
+
+    <!-- HOMEPAGE HERO -->
+    <section class="relative overflow-hidden border-b-2 border-[#173B70]">
+
+        <!-- Tick photograph -->
+        <div class="h-[320px] bg-cover sm:h-[350px]" style="background-image: url('./images/tick-hero.jpg');
+                background-position: 35% center;">
+
+            <!-- Dark gradient -->
+            <div class="absolute inset-0 bg-gradient-to-r
+                    from-[#102923]/30 via-[#092B29]/65
+                    to-[#0B2635]/95">
+            </div>
+
+            <!-- Banner content -->
+            <div class="relative z-10 mx-auto flex h-full
+                    max-w-7xl items-center justify-center
+                    px-6 py-8 sm:justify-end sm:px-10">
+
+                <div class="max-w-xl text-center text-white sm:text-left">
+
+                    <p class="mb-3 text-xs font-semibold uppercase
+                          tracking-[0.18em] text-emerald-200">
+                        Elanco Software Engineering Placement Task
+                    </p>
+
+                    <h2 class="mb-4 text-3xl font-bold
+                           leading-tight tracking-tight
+                           sm:text-4xl lg:text-5xl">
+                        Explore Tick Activity Across the UK
+                    </h2>
+
+                    <p class="text-sm leading-relaxed text-gray-100 sm:text-lg">
+                        Discover reported tick sightings, explore
+                        different species and help track activity
+                        across the UK.
+                    </p>
+
+                    <a href="#filters" class="mt-6 inline-flex items-center justify-center
+                          rounded-full bg-white px-6 py-3
+                          text-sm font-semibold text-[#173B70]
+                          shadow-lg transition-all duration-200
+                          hover:bg-[#EDF5FB] hover:shadow-xl">
+
+                        Explore Sightings
+                        <span class="ml-2" aria-hidden="true">↓</span>
+
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <main id="main-content" tabindex="-1">
+    <!-- Shown only when cached data is being used -->
+    <div id="dataWarning" role="status" class="mx-4 mt-4 hidden rounded-xl
+            border border-amber-300 bg-amber-50
+            p-4 text-sm font-medium text-amber-900">
+    </div>
+    <!-- FILTERS -->
+
+    <!-- Keep the filters above the map -->
+    <section id="filters" class="mx-4 mt-4 rounded-xl border-2
+                        border-[#173B70] bg-white p-4">
+
+        <div class="mb-4 flex flex-wrap items-center
+                        justify-between gap-3">
+
+            <h2 class="font-semibold">Filters</h2>
+
+            <!-- Reload the page and reset the filters -->
+            <button id="refreshButton" type="button" onclick="window.location.reload()" class="inline-flex cursor-pointer items-center
+                               justify-center gap-2 rounded-lg
+                               border-2 border-[#173B70] bg-white
+                               px-4 py-2 text-sm font-medium
+                               text-[#173B70] hover:bg-blue-50">
+
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+
+                    <path d="M20 11a8 8 0 1 1-2.35-5.65"></path>
+                    <path d="M20 4v6h-6"></path>
+                </svg>
+
+                Refresh
+            </button>
+        </div>
+
+        <!-- These filters are connected to main.js -->
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+
+            <!-- Filter sightings by year -->
+            <label class="flex flex-col gap-2 text-sm">
+                Date range
+
+                <select id="dateFilter" class="w-full rounded-lg border
+                                   border-[#173B70] bg-white p-3">
+
+                    <option value="all">All dates</option>
+                </select>
+            </label>
+
+            <!-- Show only the selected tick species -->
+            <label class="flex flex-col gap-2 text-sm">
+                Species
+
+                <select id="speciesFilter" class="w-full rounded-lg border
+                                   border-[#173B70] bg-white p-3">
+
+                    <option value="all">All species</option>
+                </select>
+            </label>
+
+            <!-- Filter by the number of reported sightings -->
+            <label class="flex flex-col gap-2 text-sm">
+                Reported activity
+
+                <select id="activityFilter" class="w-full rounded-lg border
+                                   border-[#173B70] bg-white p-3">
+
+                    <option value="all">All levels</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </label>
+        </div>
+
+        <!-- Show feedback when filters are applied -->
+        <p id="filterStatus" role="status" class="mt-3 text-sm text-gray-600"></p>
+    </section>
+
+
+    <!-- RESULTS AND MAP -->
+
+    <!-- Sidebar on the left and map on the right -->
+    <div class="grid grid-cols-1 gap-4 p-4 lg:grid-cols-3">
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="rounded-xl border-2 border-[#173B70]
+                          bg-white p-4 lg:col-span-1">
+
+            <h2 class="mb-3 text-lg font-semibold">
+                Results
+            </h2>
+
+            <p class="mb-3 text-xs text-gray-600">
+                Tick sightings matching your selected filters.
+            </p>
+
+            <!-- main.js adds the sighting cards here -->
+            <div id="resultsList" aria-live="polite" class="flex max-h-[360px] flex-col gap-3
+                            overflow-y-auto">
+
+                <p class="text-sm text-gray-500">
+                    Results will appear here.
+                </p>
+            </div>
+
+            <hr class="my-5 border-[#173B70]">
+
+
+            <!-- SIGHTING DETAILS -->
+
+            <!-- Map markers currently show city information -->
+            <h2 id="detailsSectionHeading" class="mb-3 text-lg font-semibold">
+                Sighting Details
+            </h2>
+            <!-- Show instructions until a city is selected -->
+            <p id="sightingPrompt" class="text-sm text-gray-500">
+
+                Click a marker on the map or a result
+                in the sidebar to view sighting details.
+            </p>
+
+            <!-- This panel appears after selecting a city -->
+            <div id="sightingPanel" class="hidden space-y-4">
+
+                <!-- Selected city and its total sightings -->
+                <div>
+                    <h3 id="selectedCity" class="text-xl font-bold"></h3>
+
+                    <p id="cityTotal" class="text-sm text-gray-600"></p>
+                </div>
+
+
+                <!-- Details for the selected report or the latest city sighting -->
+                <div class="rounded-lg bg-gray-50 p-3 text-sm">
+
+                    <h4 id="sightingDetailsHeading" class="mb-2 font-semibold">
+                        Latest sighting
+                    </h4>
+
+                    <p>
+                        Date: <span id="latestDate"></span>
+                    </p>
+
+                    <p id="sightingTimeRow" class="hidden">
+                        Time: <span id="latestTime"></span>
+                    </p>
+
+                    <p>
+                        Species: <span id="latestSpecies"></span>
+                    </p>
+
+                    <p>
+                        Latin name: <span id="latestLatin"></span>
+                    </p>
+
+                    <p>
+                        ID: <span id="latestId" class="break-all"></span>
+                    </p>
+
+                    <!-- Show the submitted photo if the report has one -->
+                    <div id="sightingPhotoSection" class="mt-3 hidden">
+
+                        <p class="mb-2 font-medium">Submitted photo</p>
+
+                        <img id="latestImage" alt="" loading="lazy" class="max-h-64 w-full rounded-lg object-contain">
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Quick actions for the selected location -->
+                <div class="flex flex-wrap gap-2">
+
+                    <!-- Directions to the selected city -->
+                    <button id="directionsButton" type="button" class="cursor-pointer rounded-lg
+                                       bg-[#0072CE] px-4 py-2
+                                       text-sm text-white
+                                       hover:bg-blue-800">
+
+                        Get Directions
+                    </button>
+
+                    <!-- Share the sighting information -->
+                    <button id="shareButton" type="button" class="cursor-pointer rounded-lg
+                                       border-2 border-[#173B70]
+                                       px-4 py-2 text-sm
+                                       hover:bg-gray-100">
+
+                        Share
+                    </button>
+                </div>
+
+
+
+                <!-- Sharing options for the selected city -->
+                <div id="shareOptions" class="hidden rounded-xl border-2 border-[#173B70]
+            bg-white p-4 shadow-md">
+
+                    <h4 class="mb-4 font-semibold">
+                        Share Sighting Details
+                    </h4>
+
+                    <div class="grid grid-cols-2 gap-3">
+
+                        <!-- WhatsApp -->
+                        <button id="shareWhatsApp" type="button" class="flex cursor-pointer flex-col items-center
+                       gap-2 rounded-xl border-2 border-[#173B70]
+                       p-4 text-center hover:bg-green-50">
+
+                            <span class="text-2xl" aria-hidden="true"></span>
+                            <span class="font-semibold">WhatsApp</span>
+                        </button>
+
+                        <!-- Email -->
+                        <button id="shareEmail" type="button" class="flex cursor-pointer flex-col items-center
+                       gap-2 rounded-xl border-2 border-[#173B70]
+                       p-4 text-center hover:bg-blue-50">
+
+                            <span class="text-2xl" aria-hidden="true"> </span>
+                            <span class="font-semibold">Email</span>
+                        </button>
+
+                        <!-- Copy text -->
+                        <button id="shareCopy" type="button" class="flex cursor-pointer flex-col items-center
+                       gap-2 rounded-xl border-2 border-[#173B70]
+                       p-4 text-center hover:bg-blue-50">
+
+                            <span class="text-2xl" aria-hidden="true"></span>
+                            <span class="font-semibold">Copy Text</span>
+                        </button>
+
+                        <!-- Device sharing -->
+                        <button id="shareMore" type="button" class="flex cursor-pointer flex-col items-center
+                       gap-2 rounded-xl border-2 border-[#173B70]
+                       p-4 text-center hover:bg-blue-50">
+
+                            <span class="text-2xl" aria-hidden="true"></span>
+                            <span class="font-semibold">More Options</span>
+                        </button>
+
+                    </div>
+                </div>
+
+
+
+                <!-- Tell the user if sharing worked -->
+                <p id="shareStatus" role="status" class="text-xs text-gray-600"></p>
+
+                <p id="locationDisclaimer" class="text-xs text-gray-500">
+                    Locations are approximate city centres,
+                    not exact tick sighting locations.
+                </p>
+
+            </div>
+            <!-- End of sightingPanel -->
+
+        </aside>
+        <!-- End of left sidebar -->
+
+
+        <!-- INTERACTIVE MAP -->
+
+        <!-- The map must stay outside the hidden sightingPanel -->
+
+
+        <section class="flex flex-col lg:col-span-2" aria-label="Interactive UK tick sightings map">
+
+            <div id="map" class="min-h-[500px] flex-1 w-full overflow-hidden rounded-xl
+                        border-2 border-[#173B70]"></div>
+
+
+            <!-- Explain what the marker colours mean -->
+            <div class="mt-3 flex flex-wrap items-center gap-5 text-sm">
+
+                <span class="font-semibold">
+                    Reported Sightings:
+                </span>
+
+                <!-- Low activity -->
+                <span class="flex items-center gap-2">
+                    <span class="h-3 w-3 rounded-full bg-green-700"></span>
+                    Low
+                </span>
+
+                <!-- Medium activity -->
+                <span class="flex items-center gap-2">
+                    <span class="h-3 w-3 rounded-full bg-yellow-500"></span>
+                    Medium
+                </span>
+
+                <!-- High activity -->
+                <span class="flex items-center gap-2">
+                    <span class="h-3 w-3 rounded-full bg-red-600"></span>
+                    High
+                </span>
+            </div>
+
+            <!-- Colours show reported activity, not medical risk -->
+            <p class="mt-2 text-xs text-gray-500">
+                Colours compare reported sighting totals
+                between cities, not disease risk.
+            </p>
+
+            <!-- ACTIVITY TIMELINE UNDER THE MAP -->
+            <div class="mt-5 rounded-2xl border border-[#DCE9DF]
+
+            bg-white p-5 shadow-sm sm:p-6">
+
+                <!-- Heading -->
+                <div class="mb-4">
+                    <p class="mb-2 text-xs font-bold uppercase
+                  tracking-widest text-[#237A53]">
+                        Sighting History
+                    </p>
+
+                    <h3 class="text-xl font-bold text-[#173B70]">
+                        Activity Timeline
+                    </h3>
+
+                    <p class="mt-2 text-sm text-gray-600">
+                        Explore how reported tick sightings have changed
+                        over the years in different UK cities.
+                    </p>
+                </div>
+
+                <!-- Show this before a city is selected -->
+                <div id="timelinePrompt" class="rounded-xl border border-dashed
+                border-[#B7D6C3] bg-[#F1F8F2]
+                px-5 py-8 text-center">
+
+                    <p class="font-semibold text-[#173B70]">
+                        Select a City on the Map
+                    </p>
+
+                    <p class="mt-2 text-sm text-gray-600">
+                        Click a dot on the map above to view
+                        its yearly tick sighting activity.
+                    </p>
+
+                </div>
+
+                <!-- Hidden until a map marker is clicked -->
+                <div id="cityTimelineSection" class="hidden">
+
+                    <!-- The selected city will appear here -->
+                    <h4 id="timelineCity" class="mb-2 text-lg font-bold text-[#173B70]">
+                    </h4>
+
+                    <p class="mb-4 text-sm text-gray-600">
+                        Reported sightings by year
+                    </p>
+
+                    <!-- main.js adds the yearly bars here -->
+                    <ol id="cityTimeline" class="max-h-72 space-y-3 overflow-y-auto
+                   pr-2 text-sm
+                   [&_progress]:h-3
+                   [&_progress]:min-w-0
+                   [&_progress]:flex-1
+                   [&_progress]:appearance-none
+                   [&_progress]:overflow-hidden
+                   [&_progress]:rounded-full
+                   [&_progress::-webkit-progress-bar]:bg-gray-200
+                   [&_progress::-webkit-progress-value]:bg-emerald-600
+                   [&_progress::-moz-progress-bar]:bg-emerald-600">
+                    </ol>
+
+                </div>
+
+            </div>
+
+        </section>
+        <!-- End of interactive map -->
+
+    </div>
+    <!-- End of results and map layout -->
+
+
+    <!-- TICK GUIDE -->
+
+    <section id="tickGuide" class="mx-4 mb-6 rounded-xl border-2
+                        border-[#173B70] bg-white p-5">
+
+
+
+        <!-- TICK SPECIES FLIP CARDS -->
+        <div class="mb-6 rounded-2xl bg-[#F1F8F2] p-4 sm:p-6">
+
+            <!-- Section heading -->
+            <div class="mb-6">
+
+                <p class="mb-2 text-xs font-bold uppercase tracking-widest
+                  text-emerald-700">
+                    Tick Species Identification
+                </p>
+
+                <h3 class="text-2xl font-bold text-[#173B70] sm:text-3xl">
+                    Discover UK Tick Species
+                </h3>
+
+                <p class="mt-2 text-sm text-gray-600">
+                    Explore six different tick species.
+                    Select a card to flip it and learn more.
+                </p>
+
+            </div>
+
+            <!-- JavaScript will add the six cards here -->
+            <div id="speciesCardGrid" class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            </div>
+
+            <!-- One reusable card design -->
+            <template id="speciesCardTemplate">
+
+                <button type="button" data-flipped="false" aria-pressed="false" class="group block w-full cursor-pointer
+                       rounded-2xl text-left
+                       [perspective:1200px]
+                       focus-visible:outline-4
+                       focus-visible:outline-offset-4
+                       focus-visible:outline-[#0072CE]">
+
+                    <!-- Both faces rotate together -->
+                    <span data-card-inner class="relative block h-[350px] w-full
+                         transition-transform duration-700 ease-in-out
+                         [transform-style:preserve-3d]
+                         group-data-[flipped=true]:[transform:rotateY(180deg)]
+                         motion-reduce:transition-none">
+
+                        <!-- FRONT OF THE CARD -->
+                        <span data-front class="absolute inset-0 flex flex-col
+                             overflow-hidden rounded-2xl
+                             border border-[#D5E6D9]
+                             bg-white shadow-md
+                             [backface-visibility:hidden]">
+
+                            <!-- Tick illustration -->
+                            <span class="flex h-[220px] items-center
+                                 justify-center bg-[#E9F5EC] p-5">
+
+                                <img data-image src="" alt="" loading="lazy" class="h-full w-full object-contain
+                                    transition-transform duration-300
+                                    group-hover:scale-105">
+                            </span>
+
+                            <!-- Species name -->
+                            <span class="flex flex-1 flex-col
+                                 justify-center p-4">
+
+                                <span data-name class="text-lg font-bold text-[#173B70]">
+                                </span>
+
+                                <span data-latin class="mt-1 text-sm italic text-gray-500">
+                                </span>
+
+                                <span class="mt-3 text-xs font-semibold
+                                     text-emerald-700">
+                                    Select to discover more
+                                </span>
+
+                            </span>
+
+                        </span>
+
+                        <!-- BACK OF THE CARD -->
+                        <span data-back aria-hidden="true" class="absolute inset-0 flex flex-col
+                             overflow-hidden rounded-2xl
+                             bg-[#173B70] p-5 text-white
+                             shadow-lg
+                             [backface-visibility:hidden]
+                             [transform:rotateY(180deg)]">
+
+                            <span class="text-xs font-bold uppercase
+                                 tracking-widest text-emerald-200">
+                                Species Information
+                            </span>
+
+                            <span data-name class="mt-4 text-xl font-bold">
+                            </span>
+
+                            <span data-latin class="mt-1 text-sm italic text-blue-100">
+                            </span>
+
+                            <span data-description class="mt-5 text-sm leading-relaxed
+                                 text-gray-100">
+                            </span>
+
+                            <span class="mt-auto pt-4 text-xs
+                                 font-semibold text-emerald-200">
+                                Select to flip back
+                            </span>
+
+                        </span>
+
+                    </span>
+
+                </button>
+
+            </template>
+
+
+
+            <p class="mt-3 text-center text-xs text-gray-500">
+                Illustrations are for general guidance.
+                Accurate species identification may require an expert.
+            </p>
+
+        </div>
+
+
+
+        <!-- TICK PREVENTION -->
+        <div id="prevention" class="scroll-mt-40 py-5">
+
+            <div class="mx-auto max-w-5xl rounded-2xl
+                bg-[#F1F8F2] p-5 sm:p-8">
+
+                <!-- Heading -->
+                <p class="mb-2 text-xs font-bold uppercase
+                  tracking-widest text-[#237A53]">
+                    Prevention Guide
+                </p>
+
+                <h3 class="text-2xl font-bold text-[#173B70] sm:text-3xl">
+                    Stay Tick Aware
+                </h3>
+
+                <p class="mt-2 text-sm text-gray-600">
+                    Four simple steps to help protect yourself and your pets.
+                </p>
+
+                <!-- Four connected steps -->
+                <ol class="mt-7">
+
+                    <!-- STEP 1 -->
+                    <li class="flex gap-4 pb-5">
+
+                        <div class="flex w-10 shrink-0 flex-col items-center">
+                            <span class="flex h-10 w-10 shrink-0 items-center
+                                 justify-center rounded-full bg-[#237A53]
+                                 font-bold text-white">
+                                01
+                            </span>
+                            <span class="mt-2 w-0.5 flex-1 bg-[#C5DDCB]"></span>
+                        </div>
+
+                        <div class="min-w-0 flex-1 rounded-xl border
+                            border-[#DCE9DF] bg-white p-5 shadow-sm
+                            transition-all duration-200
+                            hover:-translate-y-0.5 hover:shadow-md">
+
+                            <p class="text-xs font-bold uppercase
+                              tracking-wider text-[#237A53]">
+                                Before You Go
+                            </p>
+
+                            <h4 class="mt-2 text-lg font-bold text-[#173B70]">
+                                Dress for Protection
+                            </h4>
+
+                            <p class="mt-2 text-sm leading-relaxed text-gray-600">
+                                Wear long sleeves, long trousers and light-coloured
+                                clothing to help spot ticks more easily.
+                            </p>
+
+                        </div>
+                    </li>
+
+                    <!-- STEP 2 -->
+                    <li class="flex gap-4 pb-5">
+
+                        <div class="flex w-10 shrink-0 flex-col items-center">
+                            <span class="flex h-10 w-10 shrink-0 items-center
+                                 justify-center rounded-full bg-[#237A53]
+                                 font-bold text-white">
+                                02
+                            </span>
+                            <span class="mt-2 w-0.5 flex-1 bg-[#C5DDCB]"></span>
+                        </div>
+
+                        <div class="min-w-0 flex-1 rounded-xl border
+                            border-[#DCE9DF] bg-white p-5 shadow-sm
+                            transition-all duration-200
+                            hover:-translate-y-0.5 hover:shadow-md">
+
+                            <p class="text-xs font-bold uppercase
+                              tracking-wider text-[#237A53]">
+                                While Outdoors
+                            </p>
+
+                            <h4 class="mt-2 text-lg font-bold text-[#173B70]">
+                                Stick to Clear Paths
+                            </h4>
+
+                            <p class="mt-2 text-sm leading-relaxed text-gray-600">
+                                Avoid brushing against long grass and dense
+                                vegetation where ticks may be present.
+                            </p>
+
+                        </div>
+                    </li>
+
+                    <!-- STEP 3 -->
+                    <li class="flex gap-4 pb-5">
+
+                        <div class="flex w-10 shrink-0 flex-col items-center">
+                            <span class="flex h-10 w-10 shrink-0 items-center
+                                 justify-center rounded-full bg-[#237A53]
+                                 font-bold text-white">
+                                03
+                            </span>
+                            <span class="mt-2 w-0.5 flex-1 bg-[#C5DDCB]"></span>
+                        </div>
+
+                        <div class="min-w-0 flex-1 rounded-xl border
+                            border-[#DCE9DF] bg-white p-5 shadow-sm
+                            transition-all duration-200
+                            hover:-translate-y-0.5 hover:shadow-md">
+
+                            <p class="text-xs font-bold uppercase
+                              tracking-wider text-[#237A53]">
+                                After Your Walk
+                            </p>
+
+                            <h4 class="mt-2 text-lg font-bold text-[#173B70]">
+                                Check Yourself & Your Pets
+                            </h4>
+
+                            <p class="mt-2 text-sm leading-relaxed text-gray-600">
+                                Check for ticks after outdoor activities, including
+                                behind the knees, around the hairline and on pets.
+                            </p>
+
+                        </div>
+                    </li>
+
+                    <!-- STEP 4 -->
+                    <li class="flex gap-4">
+
+                        <div class="flex w-10 shrink-0 items-start justify-center">
+                            <span class="flex h-10 w-10 items-center
+                                 justify-center rounded-full bg-[#237A53]
+                                 font-bold text-white">
+                                04
+                            </span>
+                        </div>
+
+                        <div class="min-w-0 flex-1 rounded-xl border
+                            border-[#DCE9DF] bg-white p-5 shadow-sm
+                            transition-all duration-200
+                            hover:-translate-y-0.5 hover:shadow-md">
+
+                            <p class="text-xs font-bold uppercase
+                              tracking-wider text-[#237A53]">
+                                If You Find a Tick
+                            </p>
+
+                            <h4 class="mt-2 text-lg font-bold text-[#173B70]">
+                                Remove It Safely
+                            </h4>
+
+                            <p class="mt-2 text-sm leading-relaxed text-gray-600">
+                                Use fine-tipped tweezers or a tick-removal tool,
+                                then clean the bite area.
+                            </p>
+
+                        </div>
+                    </li>
+
+                </ol>
+
+            </div>
+
+            <!-- HEALTH AND PET SAFETY -->
+            <div class="mx-auto mt-6 max-w-5xl rounded-2xl
+                border-l-4 border-[#173B70]
+                bg-[#EDF4FC] p-5 sm:p-7">
+
+                <h4 class="text-lg font-bold text-[#173B70]">
+                    When to Seek Medical Advice
+                </h4>
+
+                <p class="mt-2 text-sm leading-relaxed text-gray-700">
+                    If you've been bitten by a tick and develop symptoms such
+                    as a spreading rash, fever or flu-like illness, seek
+                    advice from a healthcare professional.
+                </p>
+
+                <div class="mt-5 flex flex-wrap gap-3">
+
+                    <a href="https://www.nhs.uk/conditions/lyme-disease/" target="_blank" rel="noopener noreferrer"
+                        class="inline-flex rounded-full bg-[#173B70]
+                      px-5 py-3 text-sm font-semibold text-white
+                      transition-colors hover:bg-[#0072CE]">
+                        NHS Guidance
+                    </a>
+
+                    <a href="https://www.rspca.org.uk/adviceandwelfare/pets/general/ticks" target="_blank"
+                        rel="noopener noreferrer" class="inline-flex rounded-full border
+                      border-[#173B70] bg-white px-5 py-3
+                      text-sm font-semibold text-[#173B70]
+                      transition-colors hover:bg-blue-50">
+                        RSPCA Pet Advice
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+    <!-- End of Guidelines -->
+
+    <!-- SEASONAL ACTIVITY CHART -->
+    <section id="seasonalActivity" class="scroll-mt-40 mx-4 mb-6 overflow-hidden
+           rounded-2xl border border-[#DCE9DF]
+           bg-white shadow-sm">
+
+        <!-- Heading -->
+        <div class="border-b border-[#DCE9DF]
+                bg-gradient-to-r from-[#EFF8F0]
+                to-white p-5 sm:p-6">
+
+            <p class="mb-2 text-xs font-bold uppercase
+                  tracking-widest text-[#237A53]">
+                Data Insights
+            </p>
+
+            <h2 class="text-2xl font-bold text-[#173B70]
+                   sm:text-3xl">
+                Seasonal Tick Activity
+            </h2>
+
+            <p class="mt-2 text-sm text-gray-600">
+                Explore reported tick sightings throughout the year
+                and discover which months have the most reports.
+            </p>
+
+        </div>
+
+        <div class="p-5 sm:p-6">
+
+            <!-- City and year selection -->
+            <div class="mb-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+
+                <label class="flex flex-col gap-2 text-sm
+                          font-medium text-[#173B70]">
+                    UK City
+
+                    <select id="chartCity" class="w-full rounded-xl border
+                           border-[#D5E6D9] bg-[#FAFCFA]
+                           p-3 text-gray-800
+                           focus:border-[#237A53]
+                           focus:outline-none
+                           focus:ring-2 focus:ring-[#C5DDCB]">
+                    </select>
+                </label>
+
+                <label class="flex flex-col gap-2 text-sm
+                          font-medium text-[#173B70]">
+                    Year
+
+                    <select id="chartYear" class="w-full rounded-xl border
+                           border-[#D5E6D9] bg-[#FAFCFA]
+                           p-3 text-gray-800
+                           focus:border-[#237A53]
+                           focus:outline-none
+                           focus:ring-2 focus:ring-[#C5DDCB]">
+                    </select>
+                </label>
+
+            </div>
+
+            <!-- Summary statistics -->
+            <div class="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+
+                <!-- Total reports -->
+                <div class="rounded-xl bg-[#F1F8F2] p-4">
+
+                    <p class="text-xs font-medium text-[#526658]">
+                        Total Reported Sightings
+                    </p>
+
+                    <p id="chartTotal" class="mt-2 text-3xl font-bold text-[#173B70]">
+                        —
+                    </p>
+
+                </div>
+
+                <!-- Most active month -->
+                <div class="rounded-xl bg-[#F1F8F2] p-4">
+
+                    <p class="text-xs font-medium text-[#526658]">
+                        Peak Reporting Month
+                    </p>
+
+                    <p id="chartPeak" class="mt-2 text-xl font-bold text-[#173B70]">
+                        —
+                    </p>
+
+                </div>
+
+                <!-- Selected city and year -->
+                <div class="rounded-xl bg-[#F1F8F2] p-4">
+
+                    <p class="text-xs font-medium text-[#526658]">
+                        Selected Area & Year
+                    </p>
+
+                    <p id="chartSelection" class="mt-2 text-xl font-bold text-[#173B70]">
+                        —
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Chart container -->
+            <div class="rounded-xl border border-[#E5EEE7]
+                    bg-[#FAFCFA] p-4 sm:p-5">
+
+                <h3 class="mb-4 text-base font-semibold text-[#173B70]">
+                    Monthly Sighting Reports
+                </h3>
+
+                <div class="relative h-[240px] w-full sm:h-[270px]">
+
+                    <!-- Chart colours and appearance are configured here -->
+                    <canvas id="seasonalChart" data-bar-color="#237A53" data-hover-color="#0072CE" data-bar-radius="8"
+                        data-bar-thickness="45" data-border-skipped="false" role="img"
+                        aria-label="Monthly reported tick sightings chart">
+                    </canvas>
+
+                </div>
+
+            </div>
+
+            <!-- Updated by main.js -->
+            <p id="chartStatus" role="status" class="mt-4 text-sm font-medium text-[#237A53]">
+            </p>
+
+            <p class="mt-2 text-xs leading-relaxed text-gray-500">
+                These figures show reported sightings, not the total
+                tick population or the level of disease risk.
+                The month with the most reports may be affected
+                by reporting activity.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+
+    </main>
+
+
+    <!-- Chart.js for the seasonal activity graph -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+
+    <!-- Handles the tick species identification guide -->
+    <script src="./species-guide.js" defer></script>
+
+    <!-- Handles the map, filters, results and seasonal chart -->
+    <script type="module" src="./main.js"></script>
+
+
+    <!-- WEBSITE FOOTER -->
+    <footer class="mt-auto bg-[#173B70] text-white">
+
+        <div class="mx-auto grid max-w-7xl gap-8
+                px-6 py-10 sm:grid-cols-2 lg:grid-cols-3">
+
+            <!-- About the project -->
+            <div>
+                <h2 class="text-lg font-bold">
+                    Elanco Tick Tracker
+                </h2>
+
+                <p class="mt-3 max-w-sm text-sm leading-relaxed
+                      text-blue-100">
+                    Explore reported tick sightings, learn about
+                    different species and contribute new reports
+                    across the UK.
+                </p>
+            </div>
+
+            <!-- Navigation -->
+            <nav aria-label="Footer navigation">
+                <h3 class="font-semibold">
+                    Explore
+                </h3>
+
+                <div class="mt-3 flex flex-col items-start gap-3 text-sm">
+                    <a href="./index.html#map" class="text-blue-100 hover:text-white hover:underline">
+                        Sighting Map
+                    </a>
+
+                    <a href="./index.html#tickGuide" class="text-blue-100 hover:text-white hover:underline">
+                        Tick Species Guide
+                    </a>
+
+                    <a href="./index.html#prevention" class="text-blue-100 hover:text-white hover:underline">
+                        Prevention Tips
+                    </a>
+
+                    <a href="./report.html" class="text-blue-100 hover:text-white hover:underline">
+                        Report a Sighting
+                    </a>
+                </div>
+            </nav>
+
+            <!-- Responsible use -->
+
+
+        </div>
+
+        <div class="border-t border-white/20 px-6 py-5">
+            <p class="text-center text-xs text-blue-100">
+                © 2026 Elanco Tick Tracker ·
+                Software Engineering Placement Assessment
+            </p>
+        </div>
+
+    </footer>
+
+</body>
+
+</html>
