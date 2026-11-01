@@ -8,60 +8,45 @@ Elanco Tick Tracker is a full-stack web application for exploring reported tick 
 I wanted the website to be straightforward to use, while also showing how the frontend, API, data validation and storage work together.
 
 
+## Features
 
-Features
+### Interactive sighting map
 
-Interactive sighting map
+- Displays tick sightings across 14 UK cities using **MapLibre GL JS**.
+- Filters sightings by year, species and reporting activity.
+- Uses colour-coded markers to compare reporting activity.
+- Shows city summaries, yearly trends and individual sighting details.
+- Allows users to share sightings or view approximate locations.
 
-Displays tick sightings across 14 UK cities using MapLibre GL JS.
+### Species information and seasonal trends
 
-Filters sightings by year, species and reporting activity.
+- Six illustrated tick-species cards with descriptions and scientific names.
+- Interactive cards that flip to show more information.
+- Practical tick bite prevention advice with links to NHS and RSPCA guidance.
+- **Chart.js** bar chart displaying monthly sightings for a selected city and year.
 
-Uses colour-coded markers to compare reporting activity.
+### Report a sighting
 
-Shows city summaries, yearly trends and individual sighting details.
+- Submit sightings with a date, time, location and species.
+- Optionally upload an image (JPEG, PNG or WebP, maximum 5 MB).
+- Receive validation messages and a unique report ID.
+- Submitted sightings are checked and saved by the backend.
 
-Allows users to share sightings or view approximate locations.
+### Backend and data handling
 
-Species information and seasonal trends
+- **Node.js and Express** backend for handling API requests.
+- Retrieves and processes data from the **Elanco API**.
+- Stores submitted sightings in a local JSON file.
+- Handles image uploads using **Multer**.
+- Includes validation and handling for incomplete or duplicate data.
 
-Six illustrated tick-species cards with descriptions and scientific names.
+### Accessibility
 
-Interactive cards that flip to show more information.
+- Keyboard-friendly navigation and interactive elements.
+- Labelled forms and visible focus indicators.
+- Screen-reader-friendly feedback messages.
 
-Practical tick bite prevention advice with links to NHS and RSPCA guidance.
 
-Chart.js bar chart displaying monthly sightings for a selected city and year.
-
-Report a sighting
-
-Submit sightings with a date, time, location and species.
-
-Optionally upload an image (JPEG, PNG or WebP, maximum 5 MB).
-
-Receive validation messages and a unique report ID.
-
-Submitted sightings are checked and saved by the backend.
-
-Backend and data handling
-
-Node.js and Express backend for handling API requests.
-
-Retrieves and processes data from the Elanco API.
-
-Stores submitted sightings in a local JSON file.
-
-Handles image uploads using Multer.
-
-Includes validation and handling for incomplete or duplicate data.
-
-Accessibility
-
-Keyboard-friendly navigation and interactive elements.
-
-Labelled forms and visible focus indicators.
-
-Screen-reader-friendly feedback messages.
 ## How to run the project
 
 ### What you'll need
