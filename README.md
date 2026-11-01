@@ -239,8 +239,7 @@ This project is a working assessment prototype, not a production reporting servi
 
 A separate walkthrough video demonstrates the map and filters, reporting form, accessibility improvements and main backend decisions.
 
-**Video link:** : https://youtu.be/8jwPjTUkOI0?si=oLMBh9J5xz_aZNSC 
-
+**Watch the project walkthrough:** [Elanco Tick Tracker — Full-Stack Demo](https://youtu.be/8jwPjTUkOI0)
 ## Credits
 
 Created by **Hanin Abdallah** for the **Elanco Software Engineering Placement** assessment.
