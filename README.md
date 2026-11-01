@@ -9,40 +9,59 @@ I wanted the website to be straightforward to use, while also showing how the fr
 
 
 
-## Features
+Features
 
-### Interactive sighting map
+Interactive sighting map
 
-- Explore UK tick reports on an interactive map built with **MapLibre GL JS**.
-- Filter sightings by **year, species and reported activity level**.
-- View the number of sightings associated with each city.
-- Select a city to see its report total, latest sighting and yearly activity timeline.
-- Select an individual result to see its date, time (where available), species, scientific name, report ID and uploaded image (where available).
-- Share sighting details or open directions to an approximate city centre.
+Displays tick sightings across 14 UK cities using MapLibre GL JS.
 
-Marker colours show **relative reporting activity**. I sort city report totals and use one-third and two-thirds cut-off positions to group cities into low (green), medium (yellow) and high (red). This is a comparison of the available reports, **not a measure of infection or medical risk**.
+Filters sightings by year, species and reporting activity.
 
-### Species information and seasonal trends
+Uses colour-coded markers to compare reporting activity.
 
-- Six illustrated tick-species cards that flip to show more information.
-- Practical prevention advice with links to **NHS** and **RSPCA** guidance.
-- A **Chart.js** bar chart showing reports by month for a selected city and year.
-- Summary information including total reports and peak reporting month.
+Shows city summaries, yearly trends and individual sighting details.
 
-### Report a sighting
+Allows users to share sightings or view approximate locations.
 
-Users can submit a report containing:
+Species information and seasonal trends
 
-- A date and time.
-- A UK city/location and tick species.
-- An **optional** image (JPEG, PNG or WebP, maximum **5 MB**).
+Six illustrated tick-species cards with descriptions and scientific names.
 
-The form gives feedback for missing or invalid information, warns when no photo is included, and displays a unique report ID after a successful submission. Submitted reports are checked by the backend and saved locally.
+Interactive cards that flip to show more information.
 
-### Accessibility
+Practical tick bite prevention advice with links to NHS and RSPCA guidance.
 
-I've included a few accessibility features, including a **Skip to main content** link, visible keyboard focus, keyboard-operable species cards, labelled form controls and screen-reader-friendly form status messages. These are useful improvements, although the application has not undergone a full accessibility audit.
+Chart.js bar chart displaying monthly sightings for a selected city and year.
 
+Report a sighting
+
+Submit sightings with a date, time, location and species.
+
+Optionally upload an image (JPEG, PNG or WebP, maximum 5 MB).
+
+Receive validation messages and a unique report ID.
+
+Submitted sightings are checked and saved by the backend.
+
+Backend and data handling
+
+Node.js and Express backend for handling API requests.
+
+Retrieves and processes data from the Elanco API.
+
+Stores submitted sightings in a local JSON file.
+
+Handles image uploads using Multer.
+
+Includes validation and handling for incomplete or duplicate data.
+
+Accessibility
+
+Keyboard-friendly navigation and interactive elements.
+
+Labelled forms and visible focus indicators.
+
+Screen-reader-friendly feedback messages.
 ## How to run the project
 
 ### What you'll need
