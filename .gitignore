@@ -1,0 +1,27 @@
+
+# Installed Node.js packages
+node_modules/
+
+# Private credentials
+.env
+.env.*
+!.env.example
+
+# Local database files
+*.db
+*.sqlite
+backend/data/sightings.json
+
+# Temporary and backup files
+backend/data/*backup*.json
+backend/data/*.tmp
+*.tmp
+*.log
+
+# Uploaded images
+backend/uploads/*
+
+# Editor and system files
+.DS_Store
+Thumbs.db
+.vscode/
